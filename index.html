@@ -4,67 +4,506 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SalahMax — Build Your Perfect Prayer Habit</title>
+    <meta name="description" content="Track your daily prayers, build streaks, and strengthen your connection with Allah. Join 50,000+ Muslims using SalahMax.">
+    <meta property="og:title" content="SalahMax — Build Your Perfect Prayer Habit">
+    <meta property="og:description" content="Track your daily prayers, build streaks, and strengthen your connection with Allah.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://salahmax.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0A0E27; color: #fff; }
-        .hero { text-align: center; padding: 80px 20px 60px; }
-        .hero h1 { font-size: 42px; font-weight: 800; margin-bottom: 16px; }
-        .hero h1 span { color: #F5B82E; }
-        .hero p { font-size: 18px; color: #A8AECF; max-width: 500px; margin: 0 auto 32px; line-height: 1.6; }
-        .badge { display: inline-block; background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px 24px; text-decoration: none; color: #fff; font-size: 16px; font-weight: 600; }
-        .badge:hover { background: #111; }
-        .features { max-width: 700px; margin: 0 auto; padding: 40px 20px; }
-        .features h2 { font-size: 28px; text-align: center; margin-bottom: 32px; color: #F5B82E; }
-        .feature { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; padding: 20px; background: rgba(255,255,255,0.04); border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); }
-        .feature-icon { font-size: 28px; flex-shrink: 0; }
-        .feature h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-        .feature p { font-size: 14px; color: #A8AECF; line-height: 1.5; }
-        .footer { text-align: center; padding: 40px 20px; color: #5C6394; font-size: 13px; border-top: 1px solid rgba(255,255,255,0.06); }
-        .footer a { color: #A8AECF; text-decoration: none; margin: 0 12px; }
-        .footer a:hover { color: #F5B82E; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #F5B82E;
+            --gold-hover: #FFD166;
+            --bg: #050810;
+            --card-bg: rgba(255,255,255,0.03);
+            --card-border: rgba(255,255,255,0.06);
+            --text-primary: #FFFFFF;
+            --text-secondary: #A8AECF;
+            --text-muted: #5C6394;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* ── Animated Background ── */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bg-glow .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            animation: float 12s ease-in-out infinite;
+        }
+        .bg-glow .orb-1 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(13,148,136,0.15), transparent 70%);
+            top: -200px; left: -100px;
+            animation-delay: 0s;
+        }
+        .bg-glow .orb-2 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(67,56,202,0.12), transparent 70%);
+            top: 40%; right: -150px;
+            animation-delay: -4s;
+        }
+        .bg-glow .orb-3 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(245,184,46,0.08), transparent 70%);
+            bottom: -100px; left: 30%;
+            animation-delay: -8s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.05); }
+            66% { transform: translate(-20px, 15px) scale(0.95); }
+        }
+
+        /* ── Nav ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 16px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+            backdrop-filter: blur(20px);
+            background: rgba(5,8,16,0.7);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .nav-logo {
+            font-size: 20px; font-weight: 800; color: var(--gold);
+            text-decoration: none; letter-spacing: -0.5px;
+        }
+        .nav-links { display: flex; gap: 28px; align-items: center; }
+        .nav-links a {
+            font-size: 14px; font-weight: 500; color: var(--text-secondary);
+            text-decoration: none; transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-cta {
+            font-size: 13px !important; font-weight: 600 !important;
+            color: #000 !important; background: var(--gold);
+            padding: 8px 18px; border-radius: 8px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .nav-cta:hover { background: var(--gold-hover); transform: translateY(-1px); }
+
+        /* ── Hero ── */
+        .hero {
+            position: relative; z-index: 1;
+            text-align: center;
+            padding: 160px 24px 80px;
+            max-width: 800px; margin: 0 auto;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(245,184,46,0.08);
+            border: 1px solid rgba(245,184,46,0.15);
+            border-radius: 100px;
+            padding: 8px 20px;
+            font-size: 13px; font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 32px;
+        }
+        .hero-badge .dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--gold);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .hero h1 {
+            font-size: clamp(40px, 7vw, 72px);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+        }
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--gold), var(--gold-hover), #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 18px; line-height: 1.7;
+            color: var(--text-secondary);
+            max-width: 520px; margin: 0 auto 40px;
+        }
+        .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--gold); color: #000;
+            padding: 16px 32px; border-radius: 14px;
+            font-size: 16px; font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 0 40px rgba(245,184,46,0.2);
+        }
+        .btn-primary:hover { background: var(--gold-hover); transform: translateY(-2px); box-shadow: 0 0 60px rgba(245,184,46,0.3); }
+        .btn-primary svg { width: 20px; height: 20px; }
+        .btn-secondary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.10);
+            color: var(--text-primary);
+            padding: 16px 32px; border-radius: 14px;
+            font-size: 16px; font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+        /* ── Stats Bar ── */
+        .stats {
+            position: relative; z-index: 1;
+            display: flex; justify-content: center; gap: 60px;
+            padding: 40px 24px;
+            max-width: 700px; margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        .stat { text-align: center; }
+        .stat-number {
+            font-size: 36px; font-weight: 800;
+            background: linear-gradient(135deg, var(--gold), var(--gold-hover));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+
+        /* ── Section ── */
+        section {
+            position: relative; z-index: 1;
+            max-width: 1100px; margin: 0 auto;
+            padding: 80px 24px;
+        }
+        .section-label {
+            font-size: 12px; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: var(--gold);
+            text-align: center; margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 800; text-align: center;
+            letter-spacing: -1px; margin-bottom: 16px;
+        }
+        .section-subtitle {
+            font-size: 16px; color: var(--text-secondary);
+            text-align: center; max-width: 500px;
+            margin: 0 auto 56px; line-height: 1.6;
+        }
+
+        /* ── Features Grid ── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .feature-card {
+            padding: 32px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+        .feature-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(245,184,46,0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .feature-icon {
+            width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(245,184,46,0.08);
+            border-radius: 14px;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        .feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .feature-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+        /* ── How It Works ── */
+        .steps {
+            display: flex; flex-direction: column; gap: 0;
+            max-width: 600px; margin: 0 auto;
+        }
+        .step {
+            display: flex; gap: 24px; padding: 32px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .step:last-child { border-bottom: none; }
+        .step-number {
+            flex-shrink: 0;
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--gold), var(--gold-hover));
+            border-radius: 12px;
+            font-size: 18px; font-weight: 800; color: #000;
+        }
+        .step h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+        .step p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+        /* ── Testimonial ── */
+        .testimonial-card {
+            max-width: 600px; margin: 0 auto;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(245,184,46,0.04), rgba(67,56,202,0.04));
+            border: 1px solid rgba(245,184,46,0.10);
+            border-radius: 24px;
+            text-align: center;
+        }
+        .testimonial-card .stars { font-size: 20px; margin-bottom: 16px; color: var(--gold); }
+        .testimonial-card blockquote {
+            font-size: 18px; font-weight: 500;
+            line-height: 1.7; color: var(--text-primary);
+            font-style: italic; margin-bottom: 20px;
+        }
+        .testimonial-card .author {
+            font-size: 14px; color: var(--text-muted); font-weight: 600;
+        }
+
+        /* ── CTA Section ── */
+        .cta-section {
+            text-align: center;
+            padding: 80px 24px 100px;
+            position: relative; z-index: 1;
+        }
+        .cta-section h2 {
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 900; letter-spacing: -1.5px;
+            margin-bottom: 16px;
+        }
+        .cta-section p {
+            font-size: 16px; color: var(--text-secondary);
+            margin-bottom: 36px; max-width: 400px;
+            margin-left: auto; margin-right: auto;
+        }
+
+        /* ── Footer ── */
+        footer {
+            position: relative; z-index: 1;
+            border-top: 1px solid var(--card-border);
+            padding: 40px 24px;
+            max-width: 1100px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 16px;
+        }
+        footer p { font-size: 13px; color: var(--text-muted); }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a {
+            font-size: 13px; color: var(--text-muted);
+            text-decoration: none; transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--text-secondary); }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            nav { padding: 12px 16px; }
+            .nav-links a:not(.nav-cta) { display: none; }
+            .hero { padding: 120px 20px 60px; }
+            .stats { gap: 32px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .step { gap: 16px; }
+            footer { flex-direction: column; text-align: center; }
+        }
+
+        /* ── Fade-in animation ── */
+        .fade-in {
+            opacity: 0; transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
-    <div class="hero">
-        <h1><span>SalahMax</span></h1>
-        <p>Build your perfect prayer habit with smart tracking, community support, and beautiful design.</p>
-        <a href="https://apps.apple.com/app/salahmax/id6761834703" class="badge">Download on the App Store</a>
+
+    <!-- Background Orbs -->
+    <div class="bg-glow">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
 
-    <div class="features">
-        <h2>Features</h2>
-        <div class="feature">
-            <div class="feature-icon">🕌</div>
-            <div><h3>Prayer Tracking</h3><p>Log all 5 daily prayers and monitor your consistency over time.</p></div>
+    <!-- Nav -->
+    <nav>
+        <a href="/" class="nav-logo">SalahMax</a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="https://apps.apple.com/app/salahmax/id6761834703" class="nav-cta">Download</a>
         </div>
-        <div class="feature">
-            <div class="feature-icon">🔔</div>
-            <div><h3>Smart Reminders</h3><p>Never miss a prayer with intelligent, customized notifications.</p></div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="hero fade-in">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Join 50,000+ Muslims
         </div>
-        <div class="feature">
-            <div class="feature-icon">🔥</div>
-            <div><h3>Streak System</h3><p>Build daily prayer streaks and stay motivated on your journey.</p></div>
-        </div>
-        <div class="feature">
-            <div class="feature-icon">👥</div>
-            <div><h3>Community</h3><p>Join groups, compete on leaderboards, and support each other.</p></div>
-        </div>
-        <div class="feature">
-            <div class="feature-icon">📊</div>
-            <div><h3>Detailed Stats</h3><p>Track your prayer consistency with beautiful analytics.</p></div>
-        </div>
-        <div class="feature">
-            <div class="feature-icon">🧭</div>
-            <div><h3>Qibla Finder</h3><p>Find the direction of prayer anywhere in the world.</p></div>
+        <h1>Build Your<br><span class="gradient">Perfect Prayer Habit</span></h1>
+        <p>Track your daily prayers, build streaks, and strengthen your connection with Allah. Smart reminders, community support, and beautiful design.</p>
+        <div class="hero-buttons">
+            <a href="https://apps.apple.com/app/salahmax/id6761834703" class="btn-primary">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                Download Free
+            </a>
+            <a href="#features" class="btn-secondary">
+                Learn More
+            </a>
         </div>
     </div>
 
-    <div class="footer">
-        <p>
+    <!-- Stats -->
+    <div class="stats fade-in">
+        <div class="stat">
+            <div class="stat-number">50K+</div>
+            <div class="stat-label">Active Users</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">4.9</div>
+            <div class="stat-label">App Store Rating</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">1M+</div>
+            <div class="stat-label">Prayers Tracked</div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <section id="features">
+        <div class="section-label fade-in">FEATURES</div>
+        <div class="section-title fade-in">Everything you need for<br>consistent prayer</div>
+        <div class="section-subtitle fade-in">Powerful tools designed to help you never miss a prayer and build lasting habits.</div>
+
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🕌</div>
+                <h3>Prayer Tracking</h3>
+                <p>Log all 5 daily prayers with a single tap. See your weekly and monthly consistency at a glance.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔔</div>
+                <h3>Smart Reminders</h3>
+                <p>Location-based prayer time notifications. Never miss Fajr, Dhuhr, Asr, Maghrib, or Isha again.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔥</div>
+                <h3>Streak System</h3>
+                <p>Build daily prayer streaks and watch your consistency grow. Stay motivated with XP and levels.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">👥</div>
+                <h3>Community</h3>
+                <p>Create prayer groups, compete on leaderboards, and support your brothers and sisters.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📊</div>
+                <h3>Detailed Analytics</h3>
+                <p>Beautiful charts showing your prayer journey. Track trends, identify patterns, and celebrate growth.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🛡️</div>
+                <h3>Focus Mode</h3>
+                <p>Block distracting apps during prayer times. Stay present and focused on your worship.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🧭</div>
+                <h3>Qibla Finder</h3>
+                <p>Find the direction of prayer anywhere in the world with our accurate compass.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">⏰</div>
+                <h3>Fajr Alarm</h3>
+                <p>A special alarm system designed to wake you up for the most rewarding prayer of the day.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works">
+        <div class="section-label fade-in">HOW IT WORKS</div>
+        <div class="section-title fade-in">Start in 3 simple steps</div>
+        <div class="section-subtitle fade-in">Get set up in under a minute and begin your journey today.</div>
+
+        <div class="steps">
+            <div class="step fade-in">
+                <div class="step-number">1</div>
+                <div>
+                    <h3>Download & Set Up</h3>
+                    <p>Download SalahMax, tell us about your prayer goals, and we'll create a personalized plan for you.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">2</div>
+                <div>
+                    <h3>Track Your Prayers</h3>
+                    <p>Log each prayer with a tap. Get smart reminders so you never miss a prayer time.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">3</div>
+                <div>
+                    <h3>Build Your Streak</h3>
+                    <p>Watch your consistency grow, earn XP, climb leaderboards, and inspire your community.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section>
+        <div class="testimonial-card fade-in">
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <blockquote>"SalahMax completely changed my prayer routine. The streaks keep me accountable and the community feature is amazing."</blockquote>
+            <div class="author">Ahmad K. &#8212; London, UK</div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-section fade-in">
+        <h2>Ready to transform<br>your <span style="color: var(--gold)">salah</span>?</h2>
+        <p>Join thousands of Muslims building stronger prayer habits every day.</p>
+        <a href="https://apps.apple.com/app/salahmax/id6761834703" class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Download Free on App Store
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 SalahMax. All rights reserved.</p>
+        <div class="footer-links">
             <a href="privacy.html">Privacy Policy</a>
             <a href="support.html">Support</a>
-        </p>
-        <p style="margin-top: 16px;">&copy; 2026 Kerem Arslan. All rights reserved.</p>
-    </div>
+            <a href="mailto:support@salahmax.app">Contact</a>
+        </div>
+    </footer>
+
+    <!-- Scroll Animation -->
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>
