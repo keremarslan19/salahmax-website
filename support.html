@@ -4,55 +4,382 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support — SalahMax</title>
+    <meta name="description" content="Get help with SalahMax. Frequently asked questions and contact information.">
+    <meta name="theme-color" content="#0a0a12">
+    <link rel="canonical" href="https://salahmax.com/support.html">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23d4a028'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='20' font-weight='300' text-anchor='middle' fill='%230a0a12'%3ES%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Geist+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0A0E27; color: #E2E8F0; line-height: 1.7; }
-        .container { max-width: 700px; margin: 0 auto; padding: 60px 20px; }
-        h1 { font-size: 32px; color: #fff; margin-bottom: 8px; }
-        .subtitle { color: #A8AECF; font-size: 16px; margin-bottom: 40px; }
-        h2 { font-size: 20px; color: #F5B82E; margin: 32px 0 12px; }
-        p { font-size: 15px; color: #A8AECF; margin-bottom: 12px; }
-        a { color: #F5B82E; }
-        .back { display: inline-block; margin-bottom: 24px; color: #5C6394; text-decoration: none; font-size: 14px; }
-        .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; margin-bottom: 16px; }
-        .card h3 { font-size: 17px; color: #fff; margin-bottom: 8px; }
-        .faq-q { font-size: 16px; color: #fff; font-weight: 600; margin: 24px 0 8px; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: oklch(0.14 0.025 270);
+            --bg-raised: oklch(0.18 0.028 270);
+            --ink: oklch(0.97 0.01 85);
+            --ink-soft: oklch(0.78 0.02 85);
+            --ink-muted: oklch(0.52 0.02 270);
+            --gold: oklch(0.82 0.14 82);
+            --gold-soft: oklch(0.72 0.11 82);
+            --rule: oklch(1 0 0 / 0.08);
+            --rule-strong: oklch(1 0 0 / 0.14);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Manrope', system-ui, sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--ink);
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+            font-feature-settings: "ss01", "cv11";
+        }
+
+        .grain {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.035;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .ambient {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .ambient::before {
+            content: '';
+            position: absolute;
+            width: 680px; height: 680px;
+            top: -240px; right: -200px;
+            background: radial-gradient(circle, oklch(0.55 0.14 82 / 0.14), transparent 60%);
+            border-radius: 50%;
+            filter: blur(140px);
+        }
+
+        nav {
+            position: fixed;
+            top: clamp(1rem, 2vw, 1.5rem);
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 0.75rem 1.5rem;
+            background: oklch(0.14 0.025 270 / 0.72);
+            backdrop-filter: blur(24px) saturate(1.3);
+            -webkit-backdrop-filter: blur(24px) saturate(1.3);
+            border-radius: 999px;
+            border: 1px solid var(--rule);
+            box-shadow: 0 1px 0 0 oklch(1 0 0 / 0.04) inset, 0 24px 60px -30px oklch(0 0 0 / 0.6);
+        }
+        nav .brand {
+            font-family: 'Fraunces', serif;
+            font-weight: 500;
+            font-size: 17px;
+            letter-spacing: -0.015em;
+            color: var(--ink);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+        nav .brand-mark {
+            width: 7px; height: 7px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--gold);
+        }
+        nav .back-link {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--ink-soft);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: color 250ms var(--ease-out);
+            padding-left: 1.25rem;
+            border-left: 1px solid var(--rule);
+        }
+        nav .back-link:hover { color: var(--ink); }
+
+        main {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: clamp(8rem, 14vw, 10rem) clamp(1.5rem, 4vw, 2rem) clamp(5rem, 10vw, 7rem);
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            font-family: 'Geist Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            color: var(--gold-soft);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7em;
+            margin-bottom: 1.5rem;
+        }
+        .eyebrow::before {
+            content: '';
+            width: 28px; height: 1px;
+            background: var(--gold-soft);
+        }
+
+        h1 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 300;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            letter-spacing: -0.025em;
+            line-height: 1;
+            margin-bottom: 1rem;
+            color: var(--ink);
+            text-wrap: balance;
+        }
+        .subtitle {
+            font-size: clamp(1rem, 1.25vw, 1.125rem);
+            color: var(--ink-soft);
+            line-height: 1.55;
+            max-width: 52ch;
+            margin-bottom: 4rem;
+        }
+
+        /* Contact card */
+        .contact-card {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 2rem;
+            background: var(--bg-raised);
+            border: 1px solid var(--rule);
+            border-radius: 24px;
+            margin-bottom: 4.5rem;
+            transition: border-color 300ms var(--ease-out), background 300ms var(--ease-out);
+        }
+        .contact-card:hover {
+            border-color: var(--rule-strong);
+        }
+        @media (max-width: 620px) {
+            .contact-card { grid-template-columns: 1fr; text-align: center; gap: 1rem; padding: 1.75rem; }
+        }
+        .contact-card .mark {
+            width: 52px; height: 52px;
+            border-radius: 16px;
+            background: oklch(0 0 0 / 0.25);
+            border: 1px solid var(--rule-strong);
+            display: grid;
+            place-items: center;
+            color: var(--gold);
+            font-family: 'Fraunces', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+        .contact-card .body h2 {
+            font-family: 'Fraunces', serif;
+            font-weight: 400;
+            font-size: 1.25rem;
+            color: var(--ink);
+            margin-bottom: 0.25rem;
+        }
+        .contact-card .body p {
+            font-size: 13px;
+            color: var(--ink-soft);
+        }
+        .contact-card a.cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            background: var(--ink);
+            color: var(--bg);
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: transform 300ms var(--ease-out);
+        }
+        .contact-card a.cta:hover { transform: translateY(-1px); }
+
+        /* FAQ */
+        .faq-label {
+            font-family: 'Fraunces', serif;
+            font-weight: 300;
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+            margin-bottom: 2.5rem;
+            text-wrap: balance;
+        }
+        .faq-label em { font-style: italic; color: var(--gold); }
+
+        .faq {
+            border-top: 1px solid var(--rule);
+        }
+        .faq-item {
+            border-bottom: 1px solid var(--rule);
+            padding: 1.75rem 0;
+        }
+        .faq-item h3 {
+            font-family: 'Fraunces', serif;
+            font-weight: 400;
+            font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+            letter-spacing: -0.01em;
+            color: var(--ink);
+            margin-bottom: 0.75rem;
+            text-wrap: balance;
+        }
+        .faq-item p {
+            font-size: 14.5px;
+            line-height: 1.65;
+            color: var(--ink-soft);
+            max-width: 70ch;
+        }
+        .faq-item p + p { margin-top: 0.75rem; }
+
+        .version-block {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--rule);
+            font-family: 'Geist Mono', monospace;
+            font-size: 11px;
+            color: var(--ink-muted);
+            letter-spacing: 0.08em;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        a {
+            color: var(--gold);
+            text-decoration: none;
+            border-bottom: 1px solid oklch(0.82 0.14 82 / 0.3);
+            transition: border-color 250ms var(--ease-out);
+        }
+        a:hover {
+            border-bottom-color: var(--gold);
+        }
+        .contact-card a.cta { border-bottom: none; }
+        nav a { border-bottom: none; }
+
+        footer {
+            border-top: 1px solid var(--rule);
+            padding: 2.5rem 0 2rem;
+            max-width: 780px;
+            margin: 4rem auto 0;
+            padding-left: clamp(1.5rem, 4vw, 2rem);
+            padding-right: clamp(1.5rem, 4vw, 2rem);
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Geist Mono', monospace;
+            font-size: 11px;
+            color: var(--ink-muted);
+            letter-spacing: 0.05em;
+        }
+        footer a {
+            color: var(--ink-muted);
+            border-bottom: none;
+        }
+        footer a:hover { color: var(--ink); }
+
+        :focus { outline: none; }
+        :focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+        ::selection {
+            background: var(--gold);
+            color: oklch(0.15 0.03 270);
+        }
+
+        @media (max-width: 620px) {
+            nav { padding: 0.6rem 1rem; gap: 0.8rem; }
+            nav .back-link { padding-left: 0.75rem; }
+            footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back">&larr; Back to SalahMax</a>
-        <h1>Support</h1>
-        <p class="subtitle">We're here to help you on your prayer journey.</p>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="ambient" aria-hidden="true"></div>
 
-        <h2>Contact Us</h2>
-        <div class="card">
-            <h3>Email Support</h3>
-            <p>For any questions, issues, or feedback, reach out to us at:</p>
-            <p><a href="mailto:support@salahmax.com">support@salahmax.com</a></p>
-            <p>We typically respond within 24 hours.</p>
+    <nav aria-label="Primary">
+        <a href="/" class="brand">
+            <span class="brand-mark" aria-hidden="true"></span>
+            SalahMax
+        </a>
+        <a href="index.html" class="back-link">← Home</a>
+    </nav>
+
+    <main>
+        <div class="eyebrow">Support</div>
+        <h1>We're here <em>to help</em>.</h1>
+        <p class="subtitle">SalahMax is built by a small team that reads every message. If something isn't working, we want to know.</p>
+
+        <div class="contact-card">
+            <div class="mark">@</div>
+            <div class="body">
+                <h2>Email us directly</h2>
+                <p>We typically reply within 24 hours, often sooner.</p>
+            </div>
+            <a href="mailto:support@salahmax.com" class="cta">Write to us</a>
         </div>
 
-        <h2>Frequently Asked Questions</h2>
+        <h2 class="faq-label">Frequently asked <em>questions</em></h2>
 
-        <p class="faq-q">How do I cancel my subscription?</p>
-        <p>Go to your iPhone Settings > Apple ID > Subscriptions > SalahMax > Cancel Subscription. You'll retain access until the end of your current billing period.</p>
+        <div class="faq">
+            <article class="faq-item">
+                <h3>How do I cancel my subscription?</h3>
+                <p>Go to your iPhone Settings → Apple ID → Subscriptions → SalahMax → Cancel Subscription. You'll retain access until the end of your current billing period.</p>
+            </article>
+            <article class="faq-item">
+                <h3>How do I restore my purchase on a new device?</h3>
+                <p>Open SalahMax on your new device, go to the paywall screen, and tap "Restore Purchase" at the bottom. Make sure you're signed in with the same Apple ID.</p>
+            </article>
+            <article class="faq-item">
+                <h3>Prayer times seem incorrect. What should I do?</h3>
+                <p>Ensure location services are enabled for SalahMax (Settings → Privacy → Location Services → SalahMax). The app uses your location to calculate accurate prayer times.</p>
+                <p>You can also change the calculation method and madhab in the app's Settings screen to match your preference.</p>
+            </article>
+            <article class="faq-item">
+                <h3>How do I change the calculation method?</h3>
+                <p>Go to Settings within the app and select your preferred prayer time calculation method (Diyanet, ISNA, Muslim World League, etc.).</p>
+            </article>
+            <article class="faq-item">
+                <h3>How do I delete my account?</h3>
+                <p>Go to Settings → Account → Delete Account. This will permanently remove all your data. You can also email us at <a href="mailto:support@salahmax.com">support@salahmax.com</a> to request account deletion.</p>
+            </article>
+            <article class="faq-item">
+                <h3>Does SalahMax work offline?</h3>
+                <p>Prayer tracking, streaks, and prayer times work offline once you've set your location. Features that require a connection (leaderboards, friends, Cemaat) need the internet to sync.</p>
+            </article>
+        </div>
 
-        <p class="faq-q">How do I restore my purchase on a new device?</p>
-        <p>Open SalahMax on your new device, go to the paywall screen, and tap "Restore Purchase" at the bottom. Make sure you're signed in with the same Apple ID.</p>
+        <div class="version-block">
+            <span>Version 1.0.0</span>
+            <span>Requires iOS 17.0+</span>
+            <span>iPhone only</span>
+        </div>
+    </main>
 
-        <p class="faq-q">Prayer times seem incorrect. What should I do?</p>
-        <p>Ensure location services are enabled for SalahMax (Settings > Privacy > Location Services > SalahMax). The app uses your location to calculate accurate prayer times.</p>
-
-        <p class="faq-q">How do I change the calculation method?</p>
-        <p>Go to Settings within the app and select your preferred prayer time calculation method (Diyanet, ISNA, MWL, etc.).</p>
-
-        <p class="faq-q">How do I delete my account?</p>
-        <p>Go to Settings > Account > Delete Account. This will permanently remove all your data. You can also email us at support@salahmax.com to request account deletion.</p>
-
-        <h2>App Version</h2>
-        <p>Current version: 1.0.0</p>
-        <p>Requires iOS 17.0 or later.</p>
-    </div>
+    <footer>
+        <div>© 2026 SalahMax</div>
+        <div><a href="index.html">salahmax.com</a> · <a href="privacy.html">Privacy</a></div>
+    </footer>
 </body>
 </html>

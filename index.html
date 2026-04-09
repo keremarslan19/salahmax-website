@@ -4,11 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SalahMax — Rebuild Your Imaan</title>
-    <meta name="description" content="Track every salah. Build unbreakable streaks. Never miss Fajr again.">
+    <meta name="description" content="Track every salah. Build unbreakable streaks. Never miss Fajr again. Coming soon to the App Store.">
+    <meta name="theme-color" content="#0a0a12">
     <meta property="og:title" content="SalahMax — Rebuild Your Imaan">
     <meta property="og:description" content="Track every salah. Build unbreakable streaks. Never miss Fajr again.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://salahmax.com">
+    <meta property="og:site_name" content="SalahMax">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SalahMax — Rebuild Your Imaan">
+    <meta name="twitter:description" content="Track every salah. Build unbreakable streaks. Never miss Fajr again.">
+    <link rel="canonical" href="https://salahmax.com">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23d4a028'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='20' font-weight='300' text-anchor='middle' fill='%230a0a12'%3ES%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Geist+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -733,31 +740,93 @@
             transform: translateY(0);
         }
 
+        /* ── Focus states (a11y) ── */
+        :focus { outline: none; }
+        :focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+        a.btn-primary:focus-visible,
+        a.btn-ghost:focus-visible,
+        nav .nav-cta:focus-visible {
+            outline-offset: 4px;
+            border-radius: 999px;
+        }
+
+        /* ── Selection ── */
+        ::selection {
+            background: var(--gold);
+            color: oklch(0.15 0.03 270);
+        }
+
+        /* ── Manifesto ornament ── */
+        .ornament {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.9rem;
+            margin-bottom: 2.5rem;
+            color: var(--gold-soft);
+        }
+        .ornament-line {
+            width: 48px; height: 1px;
+            background: currentColor;
+            opacity: 0.5;
+        }
+        .ornament-mark {
+            width: 6px; height: 6px;
+            background: currentColor;
+            border-radius: 50%;
+        }
+
+        /* ── Skip to content (a11y) ── */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 1rem;
+            background: var(--gold);
+            color: oklch(0.15 0.03 270);
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            z-index: 200;
+            transition: top 200ms var(--ease-out);
+        }
+        .skip-link:focus-visible {
+            top: 1rem;
+            outline: none;
+        }
+
         /* ── Reduced motion ── */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
                 transition-duration: 0.01ms !important;
             }
+            .reveal { opacity: 1; transform: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="grain"></div>
-    <div class="ambient"></div>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="ambient" aria-hidden="true"></div>
 
-    <nav>
-        <a href="/" class="brand">
-            <span class="brand-mark"></span>
+    <nav aria-label="Primary">
+        <a href="/" class="brand" aria-label="SalahMax home">
+            <span class="brand-mark" aria-hidden="true"></span>
             SalahMax
         </a>
         <div class="links">
             <a href="#why">Why</a>
             <a href="#how">How</a>
-            <a href="#" class="nav-cta">
-                Coming soon
-                <span class="icon-wrap">
+            <a href="mailto:support@salahmax.com?subject=Notify%20me%20when%20SalahMax%20launches" class="nav-cta">
+                Notify me
+                <span class="icon-wrap" aria-hidden="true">
                     <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path d="M2 8 L8 2 M3 2 L8 2 L8 7"/>
                     </svg>
@@ -767,11 +836,12 @@
     </nav>
 
     <!-- ═══════════════ HERO ═══════════════ -->
+    <main id="main">
     <header class="hero wrap">
         <div class="hero-grid">
             <div>
                 <div class="hero-tag">
-                    <span class="hero-tag-dot"></span>
+                    <span class="hero-tag-dot" aria-hidden="true"></span>
                     <span class="hero-tag-label">Arriving on the App Store</span>
                 </div>
                 <h1 class="display hero-title">
@@ -785,9 +855,9 @@
                     SalahMax is a quiet discipline for the five daily prayers. <strong>Track every salah. Build unbreakable streaks.</strong> And never miss Fajr again.
                 </p>
                 <div class="hero-ctas">
-                    <a href="#" class="btn-primary">
-                        Join the waitlist
-                        <span class="icon-wrap">
+                    <a href="mailto:support@salahmax.com?subject=Notify%20me%20when%20SalahMax%20launches" class="btn-primary">
+                        Notify me at launch
+                        <span class="icon-wrap" aria-hidden="true">
                             <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M2 9 L9 2 M3.5 2 L9 2 L9 7.5"/>
                             </svg>
@@ -808,12 +878,12 @@
                 <div class="stat-value">iOS 17+</div>
             </div>
             <div class="stat">
-                <div class="stat-label">Trial</div>
+                <div class="stat-label">Free trial</div>
                 <div class="stat-value">3 days</div>
             </div>
             <div class="stat">
-                <div class="stat-label">Focus</div>
-                <div class="stat-value">Fajr</div>
+                <div class="stat-label">Price</div>
+                <div class="stat-value">$39.99<span style="color: var(--ink-muted); font-size: 0.6em">/yr</span></div>
             </div>
         </div>
     </header>
@@ -869,9 +939,13 @@
     </section>
 
     <!-- ═══════════════ MANIFESTO ═══════════════ -->
-    <section class="manifesto">
+    <section class="manifesto" aria-label="Mission">
         <div class="wrap manifesto-inner reveal">
-            <div class="manifesto-ar">٭</div>
+            <div class="ornament" aria-hidden="true">
+                <span class="ornament-line"></span>
+                <span class="ornament-mark"></span>
+                <span class="ornament-line"></span>
+            </div>
             <blockquote>
                 Allah is calling you.<br>
                 All you have to do is <span>answer</span>.
@@ -921,9 +995,9 @@
             <h2 class="display">The next Fajr is in a <em>few hours</em>.</h2>
             <p>Make it the one you didn't miss.</p>
             <div class="finale-cta-row">
-                <a href="#" class="btn-primary">
-                    Join the waitlist
-                    <span class="icon-wrap">
+                <a href="mailto:support@salahmax.com?subject=Notify%20me%20when%20SalahMax%20launches" class="btn-primary">
+                    Notify me at launch
+                    <span class="icon-wrap" aria-hidden="true">
                         <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path d="M2 9 L9 2 M3.5 2 L9 2 L9 7.5"/>
                         </svg>
@@ -933,6 +1007,7 @@
             </div>
         </div>
     </section>
+    </main>
 
     <!-- ═══════════════ FOOTER ═══════════════ -->
     <footer>
@@ -961,7 +1036,7 @@
                     <h4>Legal</h4>
                     <ul>
                         <li><a href="privacy.html">Privacy</a></li>
-                        <li><a href="support.html">Terms</a></li>
+                        <li><a href="privacy.html">Terms of use</a></li>
                     </ul>
                 </div>
             </div>
