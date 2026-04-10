@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Use — SalahMax</title>
+    <meta name="description" content="Terms and conditions for using SalahMax.">
+    <meta name="theme-color" content="#0a0a12">
+    <link rel="canonical" href="https://salahmax.com/terms.html">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23d4a028'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='20' font-weight='300' text-anchor='middle' fill='%230a0a12'%3ES%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Geist+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: oklch(0.14 0.025 270);
+            --bg-raised: oklch(0.18 0.028 270);
+            --ink: oklch(0.97 0.01 85);
+            --ink-soft: oklch(0.78 0.02 85);
+            --ink-muted: oklch(0.52 0.02 270);
+            --gold: oklch(0.82 0.14 82);
+            --gold-soft: oklch(0.72 0.11 82);
+            --rule: oklch(1 0 0 / 0.08);
+            --rule-strong: oklch(1 0 0 / 0.14);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Manrope', system-ui, sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--ink);
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+            font-feature-settings: "ss01", "cv11";
+        }
+
+        .grain {
+            position: fixed; inset: 0;
+            pointer-events: none; z-index: 100;
+            opacity: 0.035; mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .ambient { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .ambient::before {
+            content: ''; position: absolute;
+            width: 680px; height: 680px; top: -240px; left: -200px;
+            background: radial-gradient(circle, oklch(0.55 0.14 82 / 0.14), transparent 60%);
+            border-radius: 50%; filter: blur(140px);
+        }
+
+        nav {
+            position: fixed; top: clamp(1rem, 2vw, 1.5rem); left: 50%; transform: translateX(-50%); z-index: 90;
+            display: flex; align-items: center; gap: 1.25rem;
+            padding: 0.75rem 1.5rem;
+            background: oklch(0.14 0.025 270 / 0.72);
+            backdrop-filter: blur(24px) saturate(1.3); -webkit-backdrop-filter: blur(24px) saturate(1.3);
+            border-radius: 999px; border: 1px solid var(--rule);
+            box-shadow: 0 1px 0 0 oklch(1 0 0 / 0.04) inset, 0 24px 60px -30px oklch(0 0 0 / 0.6);
+        }
+        nav .brand { font-family: 'Fraunces', serif; font-weight: 500; font-size: 17px; letter-spacing: -0.015em; color: var(--ink); text-decoration: none; display: flex; align-items: center; gap: 0.55rem; }
+        nav .brand-mark { width: 7px; height: 7px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 12px var(--gold); }
+        nav .back-link { font-size: 12px; font-weight: 500; color: var(--ink-soft); text-decoration: none; display: flex; align-items: center; gap: 0.35rem; transition: color 250ms var(--ease-out); padding-left: 1.25rem; border-left: 1px solid var(--rule); }
+        nav .back-link:hover { color: var(--ink); }
+
+        main { max-width: 720px; margin: 0 auto; padding: clamp(8rem, 14vw, 10rem) clamp(1.5rem, 4vw, 2rem) clamp(5rem, 10vw, 7rem); position: relative; z-index: 1; }
+
+        .eyebrow { font-family: 'Geist Mono', monospace; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.22em; color: var(--gold-soft); display: inline-flex; align-items: center; gap: 0.7em; margin-bottom: 1.5rem; }
+        .eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold-soft); }
+
+        h1 { font-family: 'Fraunces', Georgia, serif; font-weight: 300; font-size: clamp(2.5rem, 6vw, 4rem); letter-spacing: -0.025em; line-height: 1; margin-bottom: 0.75rem; color: var(--ink); text-wrap: balance; }
+        .date { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--ink-muted); letter-spacing: 0.05em; margin-bottom: 3rem; }
+
+        h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(1.4rem, 2.5vw, 1.75rem); letter-spacing: -0.015em; line-height: 1.2; color: var(--ink); margin: 3rem 0 1rem; text-wrap: balance; }
+        h2::before { content: ''; display: block; width: 36px; height: 1px; background: var(--gold-soft); margin-bottom: 1.25rem; opacity: 0.6; }
+
+        p, li { font-size: 15px; line-height: 1.7; color: var(--ink-soft); margin-bottom: 1rem; max-width: 68ch; }
+        ul { list-style: none; padding-left: 0; margin-bottom: 1.25rem; }
+        li { padding-left: 1.5rem; position: relative; margin-bottom: 0.75rem; }
+        li::before { content: ''; position: absolute; left: 0; top: 0.65em; width: 6px; height: 1px; background: var(--gold-soft); opacity: 0.7; }
+
+        strong { color: var(--ink); font-weight: 600; }
+        a { color: var(--gold); text-decoration: none; border-bottom: 1px solid oklch(0.82 0.14 82 / 0.3); transition: border-color 250ms var(--ease-out); }
+        a:hover { border-bottom-color: var(--gold); }
+
+        footer { border-top: 1px solid var(--rule); padding: 2.5rem 0 2rem; max-width: 720px; margin: 4rem auto 0; padding-left: clamp(1.5rem, 4vw, 2rem); padding-right: clamp(1.5rem, 4vw, 2rem); position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--ink-muted); letter-spacing: 0.05em; }
+        footer a { color: var(--ink-muted); border-bottom: none; }
+        footer a:hover { color: var(--ink); }
+
+        :focus { outline: none; }
+        :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+        ::selection { background: var(--gold); color: oklch(0.15 0.03 270); }
+
+        @media (max-width: 620px) {
+            nav { padding: 0.6rem 1rem; gap: 0.8rem; }
+            footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="ambient" aria-hidden="true"></div>
+
+    <nav aria-label="Primary">
+        <a href="/" class="brand"><span class="brand-mark" aria-hidden="true"></span> SalahMax</a>
+        <a href="index.html" class="back-link">← Home</a>
+    </nav>
+
+    <main>
+        <div class="eyebrow">Legal</div>
+        <h1>Terms of Use</h1>
+        <p class="date">Last updated: April 10, 2026</p>
+
+        <h2>Acceptance of terms</h2>
+        <p>By downloading, installing, or using SalahMax ("the App"), you agree to these Terms of Use. If you do not agree, do not use the App.</p>
+
+        <h2>Description of service</h2>
+        <p>SalahMax is a prayer tracking and spiritual wellness application that provides prayer time calculations, streak tracking, community features, and related tools. The App is designed to support daily Islamic prayer habits.</p>
+
+        <h2>Subscriptions and payments</h2>
+        <ul>
+            <li>SalahMax offers auto-renewable subscription plans: Monthly and Yearly.</li>
+            <li>The Yearly plan includes a 3-day free trial. If you do not cancel before the trial ends, you will be charged the subscription price.</li>
+            <li>Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period.</li>
+            <li>Payment is charged to your Apple ID account at confirmation of purchase.</li>
+            <li>You can manage and cancel subscriptions in your iPhone Settings → Apple ID → Subscriptions.</li>
+            <li>No refunds are provided for the unused portion of any subscription period, except as required by applicable law.</li>
+        </ul>
+
+        <h2>Subscription prices</h2>
+        <ul>
+            <li><strong>Monthly:</strong> $9.99/month (auto-renewing)</li>
+            <li><strong>Yearly:</strong> $39.99/year (auto-renewing, 3-day free trial included)</li>
+        </ul>
+        <p>Prices may vary by region. The actual price will be displayed in the App Store before purchase.</p>
+
+        <h2>User accounts</h2>
+        <p>You may create an account using Apple Sign-In, Google Sign-In, or email registration. You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account.</p>
+
+        <h2>User conduct</h2>
+        <p>When using community features (groups, Cemaat rooms, friend system), you agree to:</p>
+        <ul>
+            <li>Not post offensive, harmful, or inappropriate content</li>
+            <li>Not harass, threaten, or intimidate other users</li>
+            <li>Not spam or send unsolicited messages</li>
+            <li>Not share personal contact information in public rooms</li>
+            <li>Not attempt to circumvent any content moderation systems</li>
+        </ul>
+        <p>We reserve the right to suspend or terminate accounts that violate these guidelines.</p>
+
+        <h2>Intellectual property</h2>
+        <p>All content, features, and functionality of SalahMax — including design, text, graphics, and code — are owned by SalahMax and protected by copyright and intellectual property laws. You may not copy, modify, distribute, or create derivative works without our written consent.</p>
+
+        <h2>Prayer time accuracy</h2>
+        <p>Prayer times are calculated using established Islamic calculation methods and your device's location. While we strive for accuracy, SalahMax does not guarantee the precision of prayer times. Users should verify prayer times with their local mosque or Islamic authority when in doubt.</p>
+
+        <h2>Limitation of liability</h2>
+        <p>SalahMax is provided "as is" without warranties of any kind. We are not liable for any damages arising from your use of the App, including but not limited to missed prayers, incorrect prayer times, or data loss.</p>
+
+        <h2>Privacy</h2>
+        <p>Your use of SalahMax is also governed by our <a href="privacy.html">Privacy Policy</a>, which describes how we collect, use, and protect your data.</p>
+
+        <h2>Changes to these terms</h2>
+        <p>We may update these Terms of Use from time to time. Continued use of the App after changes constitutes acceptance of the revised terms. We will notify you of significant changes through the App.</p>
+
+        <h2>Governing law</h2>
+        <p>These terms are governed by the laws of the Republic of Turkey, without regard to conflict of law provisions.</p>
+
+        <h2>Contact</h2>
+        <p>Questions about these terms? Contact us at <a href="mailto:support@salahmax.com">support@salahmax.com</a>.</p>
+    </main>
+
+    <footer>
+        <div>© 2026 SalahMax</div>
+        <div><a href="index.html">salahmax.com</a> · <a href="privacy.html">Privacy</a> · <a href="support.html">Support</a></div>
+    </footer>
+</body>
+</html>
