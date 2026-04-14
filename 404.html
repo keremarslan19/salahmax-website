@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SalahMax</title>
+    <meta name="theme-color" content="#0a0a12">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23d4a028'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='20' font-weight='300' text-anchor='middle' fill='%230a0a12'%3ES%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: oklch(0.14 0.025 270);
+            --bg-raised: oklch(0.18 0.028 270);
+            --ink: oklch(0.97 0.01 85);
+            --ink-soft: oklch(0.78 0.02 85);
+            --ink-muted: oklch(0.52 0.02 270);
+            --gold: oklch(0.82 0.14 82);
+            --gold-soft: oklch(0.72 0.11 82);
+            --gold-deep: oklch(0.48 0.10 70);
+            --accent-green: oklch(0.70 0.17 148);
+            --rule: oklch(1 0 0 / 0.10);
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Manrope', system-ui, sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--ink);
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Grain texture — matches the brand */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.035;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* Ambient glow */
+        body::after {
+            content: '';
+            position: fixed;
+            width: 780px; height: 780px;
+            top: -280px; left: -240px;
+            border-radius: 50%;
+            filter: blur(140px);
+            background: radial-gradient(circle, oklch(0.55 0.14 82 / 0.18), transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .stage {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+        }
+
+        /* ── Invite variant (when path is /u/<handle>) ── */
+        .invite { display: none; }
+        .invite.active { display: block; }
+
+        .avatar-frame {
+            width: 112px; height: 112px;
+            margin: 0 auto 28px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: radial-gradient(circle at 30% 30%,
+                oklch(0.65 0.16 148 / 0.5),
+                oklch(0.48 0.14 148 / 0.7));
+            box-shadow: 0 0 80px oklch(0.70 0.17 148 / 0.3);
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 300;
+            font-size: 52px;
+            color: var(--ink);
+            letter-spacing: -0.03em;
+            position: relative;
+        }
+
+        .avatar-frame::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 1px solid oklch(0.70 0.17 148 / 0.3);
+        }
+        .avatar-frame::after {
+            content: '';
+            position: absolute;
+            inset: -16px;
+            border-radius: 50%;
+            border: 1px solid oklch(0.70 0.17 148 / 0.12);
+        }
+
+        .eyebrow {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 500;
+            font-size: 12px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+
+        .handle {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 300;
+            font-size: clamp(36px, 8vw, 52px);
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 8px;
+            color: var(--ink);
+        }
+        .handle .at {
+            color: var(--accent-green);
+            font-weight: 400;
+        }
+
+        .invite-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--ink-soft);
+            margin-bottom: 36px;
+        }
+
+        .invite-line {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 300;
+            font-size: clamp(18px, 3.2vw, 22px);
+            font-style: italic;
+            color: var(--ink-soft);
+            line-height: 1.45;
+            margin-bottom: 40px;
+            text-wrap: balance;
+        }
+
+        .cta-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 18px 28px;
+            background: var(--accent-green);
+            color: oklch(0.15 0.03 148);
+            font-family: 'Manrope', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            text-decoration: none;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                        box-shadow 0.25s ease,
+                        background 0.25s ease;
+            box-shadow: 0 10px 30px -10px oklch(0.70 0.17 148 / 0.5);
+        }
+        .cta-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 40px -10px oklch(0.70 0.17 148 / 0.65);
+        }
+        .cta-primary svg { width: 16px; height: 16px; }
+
+        .cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 16px 28px;
+            margin-top: 12px;
+            background: transparent;
+            color: var(--ink-soft);
+            font-family: 'Manrope', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 14px;
+            border: 1px solid var(--rule);
+            transition: border-color 0.25s ease, color 0.25s ease;
+        }
+        .cta-secondary:hover {
+            border-color: var(--gold-soft);
+            color: var(--ink);
+        }
+
+        .fine-print {
+            margin-top: 32px;
+            font-size: 12px;
+            color: var(--ink-muted);
+            letter-spacing: 0.04em;
+        }
+        .fine-print a {
+            color: var(--gold-soft);
+            text-decoration: none;
+            border-bottom: 1px solid oklch(0.72 0.11 82 / 0.3);
+            padding-bottom: 1px;
+        }
+
+        /* ── Generic 404 (when path doesn't match /u/) ── */
+        .generic-404 { display: block; }
+        .generic-404.hidden { display: none; }
+
+        .error-code {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 300;
+            font-size: clamp(80px, 18vw, 140px);
+            line-height: 0.9;
+            color: var(--gold);
+            letter-spacing: -0.04em;
+            margin-bottom: 20px;
+        }
+        .error-title {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 300;
+            font-size: clamp(22px, 4vw, 28px);
+            color: var(--ink);
+            margin-bottom: 14px;
+            line-height: 1.2;
+        }
+        .error-body {
+            font-size: 15px;
+            color: var(--ink-soft);
+            margin-bottom: 28px;
+        }
+        .home-link {
+            display: inline-block;
+            font-family: 'Manrope', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--gold);
+            text-decoration: none;
+            padding: 14px 26px;
+            border: 1px solid oklch(0.72 0.11 82 / 0.3);
+            border-radius: 12px;
+            transition: all 0.25s ease;
+        }
+        .home-link:hover {
+            border-color: var(--gold);
+            background: oklch(0.82 0.14 82 / 0.08);
+        }
+
+        /* Entry animation */
+        .stage > * {
+            opacity: 0;
+            transform: translateY(8px);
+            animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .stage > *:nth-child(1) { animation-delay: 0.05s; }
+        .stage > *:nth-child(2) { animation-delay: 0.15s; }
+        .stage > *:nth-child(3) { animation-delay: 0.25s; }
+        .stage > *:nth-child(4) { animation-delay: 0.35s; }
+        .stage > *:nth-child(5) { animation-delay: 0.45s; }
+        .stage > *:nth-child(6) { animation-delay: 0.55s; }
+        @keyframes rise {
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Invite variant: populated by JS when path is /u/<handle> -->
+    <main class="stage invite" id="invite-stage" aria-hidden="true">
+        <div class="avatar-frame" id="avatar-initial">S</div>
+        <div class="eyebrow">You've been invited</div>
+        <h1 class="handle"><span class="at">@</span><span id="handle-text">handle</span></h1>
+        <p class="invite-name" id="invite-name">wants to pray alongside you on SalahMax.</p>
+        <blockquote class="invite-line">“Stand in prayer together. Hold each other up. Never miss another Fajr.”</blockquote>
+        <a class="cta-primary" id="open-app-btn" href="#">
+            Open in SalahMax
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
+        </a>
+        <a class="cta-secondary" id="get-app-btn" href="https://salahmax.com">
+            Don't have the app? Get SalahMax
+        </a>
+        <p class="fine-print">
+            Add friends by @username on <a href="https://salahmax.com">salahmax.com</a>
+        </p>
+    </main>
+
+    <!-- Generic 404 -->
+    <main class="stage generic-404" id="generic-stage">
+        <div class="error-code">404</div>
+        <h1 class="error-title">This page wandered off.</h1>
+        <p class="error-body">We couldn't find what you were looking for — but your prayers don't need a map.</p>
+        <a class="home-link" href="https://salahmax.com">RETURN HOME</a>
+    </main>
+
+    <script>
+        (function () {
+            const path = window.location.pathname || '';
+            const match = path.match(/^\/u\/([a-z][a-z0-9_]{2,19})\/?$/i);
+
+            if (!match) return; // generic 404 stays
+
+            const handle = match[1].toLowerCase();
+            const invite = document.getElementById('invite-stage');
+            const generic = document.getElementById('generic-stage');
+
+            // Swap which variant is visible
+            invite.classList.add('active');
+            invite.setAttribute('aria-hidden', 'false');
+            generic.classList.add('hidden');
+            document.title = '@' + handle + ' on SalahMax';
+
+            // Populate the handle + first-letter avatar
+            document.getElementById('handle-text').textContent = handle;
+            document.getElementById('avatar-initial').textContent = handle[0].toUpperCase();
+
+            // Primary CTA behavior:
+            //   If iOS with app installed, the universal link would have
+            //   already opened the app before this page rendered. We reach
+            //   here only as a fallback. Try the custom scheme first; if
+            //   nothing caught it, send to the website home (App Store link
+            //   will replace this once the app ships).
+            const openBtn = document.getElementById('open-app-btn');
+            openBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const schemeUrl = 'salahmax://add/' + handle;
+                const fallback = 'https://salahmax.com';
+                const fallbackAt = Date.now() + 1500;
+
+                // Attempt scheme — if the app is installed, the page
+                // unloads and the timeout never fires.
+                window.location.href = schemeUrl;
+                setTimeout(function () {
+                    if (Date.now() < fallbackAt) return;
+                    window.location.href = fallback;
+                }, 1600);
+            });
+
+            // Auto-attempt on page load too (for cases where the universal
+            // link machinery didn't hook — covers in-app webviews etc.)
+            setTimeout(function () {
+                window.location.href = 'salahmax://add/' + handle;
+            }, 350);
+        })();
+    </script>
+</body>
+</html>

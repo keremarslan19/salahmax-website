@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appID": "D78HWBMF75.com.muslimapp.prayers",
+        "paths": ["/u/*"]
+      }
+    ]
+  }
+}
