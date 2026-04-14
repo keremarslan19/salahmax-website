@@ -329,33 +329,56 @@
             document.getElementById('handle-text').textContent = handle;
             document.getElementById('avatar-initial').textContent = handle[0].toUpperCase();
 
-            // Primary CTA behavior:
-            //   If iOS with app installed, the universal link would have
-            //   already opened the app before this page rendered. We reach
-            //   here only as a fallback. Try the custom scheme first; if
-            //   nothing caught it, send to the website home (App Store link
-            //   will replace this once the app ships).
+            // ── Destinations ───────────────────────────────────────────
+            const schemeUrl = 'salahmax://add/' + handle;
+            // Swap in the real App Store link once the app is listed:
+            // e.g. 'https://apps.apple.com/app/salahmax/id0000000000'
+            const storeUrl = 'https://salahmax.com';
             const openBtn = document.getElementById('open-app-btn');
+            const getBtn = document.getElementById('get-app-btn');
+            getBtn.href = storeUrl;
+
+            // Click handler — manual retry if the auto-open was missed
             openBtn.addEventListener('click', function (e) {
                 e.preventDefault();
-                const schemeUrl = 'salahmax://add/' + handle;
-                const fallback = 'https://salahmax.com';
-                const fallbackAt = Date.now() + 1500;
-
-                // Attempt scheme — if the app is installed, the page
-                // unloads and the timeout never fires.
                 window.location.href = schemeUrl;
                 setTimeout(function () {
-                    if (Date.now() < fallbackAt) return;
-                    window.location.href = fallback;
+                    if (!document.hidden) window.location.href = storeUrl;
                 }, 1600);
             });
 
-            // Auto-attempt on page load too (for cases where the universal
-            // link machinery didn't hook — covers in-app webviews etc.)
+            // ── Platform detection ─────────────────────────────────────
+            // Only iOS can meaningfully open the scheme. On desktop/Android
+            // we just show the landing and let the user tap "Get SalahMax".
+            const ua = navigator.userAgent || '';
+            const isIOS = /iPad|iPhone|iPod/.test(ua)
+                || (ua.includes('Mac') && navigator.maxTouchPoints > 1);
+
+            if (!isIOS) return;
+
+            // ── Auto-open flow (iOS only) ──────────────────────────────
+            // 1. Fire the scheme immediately. If the app is installed,
+            //    iOS catches it and this page unloads.
+            // 2. Listen for visibilitychange — the moment the page hides,
+            //    we know the app opened; cancel any fallback.
+            // 3. If ~1.6s elapse and the page is still visible, the app
+            //    isn't installed — push to the store.
+            let appOpened = false;
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) appOpened = true;
+            });
+            window.addEventListener('pagehide', function () {
+                appOpened = true;
+            });
+
+            // Kick the scheme right away
+            window.location.href = schemeUrl;
+
+            // Fallback to the store if the app didn't grab us
             setTimeout(function () {
-                window.location.href = 'salahmax://add/' + handle;
-            }, 350);
+                if (appOpened || document.hidden) return;
+                window.location.href = storeUrl;
+            }, 1600);
         })();
     </script>
 </body>
