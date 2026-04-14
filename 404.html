@@ -300,6 +300,27 @@
         </p>
     </main>
 
+    <!-- Group invite variant: populated by JS when path is /g/<code> -->
+    <main class="stage invite" id="group-stage" aria-hidden="true">
+        <div class="avatar-frame" style="font-family:'Manrope',sans-serif;font-size:38px;font-weight:300;letter-spacing:0.12em;" id="group-initial">⛾</div>
+        <div class="eyebrow">You're invited to a group</div>
+        <h1 class="handle"><span class="at" style="font-weight:400;">·</span><span id="group-code">CODE</span></h1>
+        <p class="invite-name">Six-digit join code · Tap to enter with one tap.</p>
+        <blockquote class="invite-line">“A hand that holds another in prayer never walks alone.”</blockquote>
+        <a class="cta-primary" id="group-open-btn" href="#">
+            Join on SalahMax
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
+        </a>
+        <a class="cta-secondary" id="group-get-btn" href="https://salahmax.com">
+            Don't have the app? Get SalahMax
+        </a>
+        <p class="fine-print">
+            Groups let friends track daily prayers together on <a href="https://salahmax.com">salahmax.com</a>
+        </p>
+    </main>
+
     <!-- Generic 404 -->
     <main class="stage generic-404" id="generic-stage">
         <div class="error-code">404</div>
@@ -311,74 +332,92 @@
     <script>
         (function () {
             const path = window.location.pathname || '';
-            const match = path.match(/^\/u\/([a-z][a-z0-9_]{2,19})\/?$/i);
+            const userMatch = path.match(/^\/u\/([a-z][a-z0-9_]{2,19})\/?$/i);
+            const groupMatch = path.match(/^\/g\/([a-z0-9]{6,8})\/?$/i);
 
-            if (!match) return; // generic 404 stays
+            if (!userMatch && !groupMatch) return; // generic 404 stays
 
-            const handle = match[1].toLowerCase();
-            const invite = document.getElementById('invite-stage');
-            const generic = document.getElementById('generic-stage');
-
-            // Swap which variant is visible
-            invite.classList.add('active');
-            invite.setAttribute('aria-hidden', 'false');
-            generic.classList.add('hidden');
-            document.title = '@' + handle + ' on SalahMax';
-
-            // Populate the handle + first-letter avatar
-            document.getElementById('handle-text').textContent = handle;
-            document.getElementById('avatar-initial').textContent = handle[0].toUpperCase();
-
-            // ── Destinations ───────────────────────────────────────────
-            const schemeUrl = 'salahmax://add/' + handle;
             // Swap in the real App Store link once the app is listed:
             // e.g. 'https://apps.apple.com/app/salahmax/id0000000000'
             const storeUrl = 'https://salahmax.com';
-            const openBtn = document.getElementById('open-app-btn');
-            const getBtn = document.getElementById('get-app-btn');
-            getBtn.href = storeUrl;
 
-            // Click handler — manual retry if the auto-open was missed
-            openBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                window.location.href = schemeUrl;
-                setTimeout(function () {
-                    if (!document.hidden) window.location.href = storeUrl;
-                }, 1600);
-            });
-
-            // ── Platform detection ─────────────────────────────────────
-            // Only iOS can meaningfully open the scheme. On desktop/Android
-            // we just show the landing and let the user tap "Get SalahMax".
+            // Shared helpers
             const ua = navigator.userAgent || '';
             const isIOS = /iPad|iPhone|iPod/.test(ua)
                 || (ua.includes('Mac') && navigator.maxTouchPoints > 1);
 
-            if (!isIOS) return;
+            function hookVariant(config) {
+                // config: { stageId, openBtnId, getBtnId, schemeUrl, title, populate }
+                const stage = document.getElementById(config.stageId);
+                const generic = document.getElementById('generic-stage');
 
-            // ── Auto-open flow (iOS only) ──────────────────────────────
-            // 1. Fire the scheme immediately. If the app is installed,
-            //    iOS catches it and this page unloads.
-            // 2. Listen for visibilitychange — the moment the page hides,
-            //    we know the app opened; cancel any fallback.
-            // 3. If ~1.6s elapse and the page is still visible, the app
-            //    isn't installed — push to the store.
-            let appOpened = false;
-            document.addEventListener('visibilitychange', function () {
-                if (document.hidden) appOpened = true;
-            });
-            window.addEventListener('pagehide', function () {
-                appOpened = true;
-            });
+                stage.classList.add('active');
+                stage.setAttribute('aria-hidden', 'false');
+                generic.classList.add('hidden');
+                document.title = config.title;
 
-            // Kick the scheme right away
-            window.location.href = schemeUrl;
+                config.populate();
 
-            // Fallback to the store if the app didn't grab us
-            setTimeout(function () {
-                if (appOpened || document.hidden) return;
-                window.location.href = storeUrl;
-            }, 1600);
+                const openBtn = document.getElementById(config.openBtnId);
+                const getBtn = document.getElementById(config.getBtnId);
+                getBtn.href = storeUrl;
+
+                // Manual retry if the auto-open was missed
+                openBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.location.href = config.schemeUrl;
+                    setTimeout(function () {
+                        if (!document.hidden) window.location.href = storeUrl;
+                    }, 1600);
+                });
+
+                // iOS only: auto-open flow (no tap required)
+                if (!isIOS) return;
+
+                let appOpened = false;
+                document.addEventListener('visibilitychange', function () {
+                    if (document.hidden) appOpened = true;
+                });
+                window.addEventListener('pagehide', function () {
+                    appOpened = true;
+                });
+
+                // Kick the scheme right away
+                window.location.href = config.schemeUrl;
+
+                // Fallback to the store if the app didn't grab us
+                setTimeout(function () {
+                    if (appOpened || document.hidden) return;
+                    window.location.href = storeUrl;
+                }, 1600);
+            }
+
+            if (userMatch) {
+                const handle = userMatch[1].toLowerCase();
+                hookVariant({
+                    stageId: 'invite-stage',
+                    openBtnId: 'open-app-btn',
+                    getBtnId: 'get-app-btn',
+                    schemeUrl: 'salahmax://add/' + handle,
+                    title: '@' + handle + ' on SalahMax',
+                    populate: function () {
+                        document.getElementById('handle-text').textContent = handle;
+                        document.getElementById('avatar-initial').textContent = handle[0].toUpperCase();
+                    }
+                });
+            } else if (groupMatch) {
+                const code = groupMatch[1].toUpperCase();
+                hookVariant({
+                    stageId: 'group-stage',
+                    openBtnId: 'group-open-btn',
+                    getBtnId: 'group-get-btn',
+                    schemeUrl: 'salahmax://join/' + code,
+                    title: 'Join group ' + code + ' on SalahMax',
+                    populate: function () {
+                        document.getElementById('group-code').textContent = code;
+                    }
+                });
+            }
         })();
     </script>
 </body>
